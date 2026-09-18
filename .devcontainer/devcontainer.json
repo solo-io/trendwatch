@@ -1,0 +1,49 @@
+{
+	"containerEnv": {
+		// host.docker.internal resolves to the host Mac via the host-gateway mapping in
+		// runArgs, so this works for anyone who deploys the container without editing IPs.
+		"LLM_BASE_URL": "http://host.docker.internal:1234/v1", //Default for LM Studio, switch to port 11434 for Ollama
+		"LLM_MODEL": "qwen3:8b",
+		"MCP_URL": "stdio:./mcp-servers/trends_server.py",
+		// Jaeger runs as a sibling container named "jaeger" on the llm network.
+		// localhost would resolve to this devcontainer, not Jaeger, so use the name.
+		"OTEL_EXPORTER_OTLP_ENDPOINT": "http://jaeger:4317"
+	},
+	"name": "python-311-docker-lmstudio",
+	"image": "mcr.microsoft.com/devcontainers/python:3.11-bookworm",
+	"features": {
+		// Gives the container the docker CLI and wires it to the host's Docker socket
+		// (docker-outside-of-docker) so containers you start run as siblings on the host.
+		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+			"moby": true,
+			"installDockerBuildx": true,
+			"installDockerComposeSwitch": true,
+			"version": "latest",
+			"dockerDashComposeVersion": "v2"
+		}
+		
+	},
+	// Install jq inside the container.
+	"onCreateCommand": "sudo apt-get update && sudo apt-get install -y jq && sudo rm -rf /var/lib/apt/lists/*",
+	// Install dependencies and health-check the LLM server and Jaeger from inside the container.
+	"postCreateCommand": "sh .devcontainer/setup.sh",
+	// Ensure the shared "llm" network and Jaeger sibling container exist on the host
+	// before this container starts. See .vscode/init-host.sh for details.
+	"initializeCommand": "sh .devcontainer/init-host.sh",
+	// Join the shared "llm" network so sibling containers can reach this one by name.
+	"runArgs": [
+		"--add-host=host.docker.internal:host-gateway",
+		"--network=llm"
+	],
+	
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.python",
+				"ms-python.vscode-pylance",
+				"ms-azuretools.vscode-docker"
+			]
+		}
+	},
+	"remoteUser": "vscode"
+}

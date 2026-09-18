@@ -4,7 +4,7 @@ config:
     url: sqlite://./data.db
 frontendPolicies:
   tracing:
-    host: localhost:4317
+    host: jaeger:4317
     randomSampling: true
 llm:
   models:

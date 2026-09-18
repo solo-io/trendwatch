@@ -108,7 +108,7 @@ if TRACING:
         _ep = os.environ.get("OTEL_EXPORTER_OTLP_ENDPOINT", "")
         if _proto.startswith("grpc"):
             from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
-            _exporter = OTLPSpanExporter(endpoint=_ep or "http://localhost:4317", insecure=True)
+            _exporter = OTLPSpanExporter(endpoint=_ep or "http://jaeger:4317", insecure=True)
         else:
             from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
             _exporter = OTLPSpanExporter(endpoint=f"{(_ep or 'http://localhost:4318').rstrip('/')}/v1/traces")
