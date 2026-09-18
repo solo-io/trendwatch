@@ -25,6 +25,8 @@ Verify that the `agentgateway` binary is in the PATH:
 agentgateway --version
 ```
 
+You can open the agentgateway UI by opening the vscode command pallet, search for "Open port in browser" and select port 15000.
+
 ## Configure the proxy
 
 Agentgateway can be configured to call a variety of models and providers.
@@ -74,7 +76,6 @@ In that second terminal, configure the `trendwatch` agent to point at the proxy 
 ```shell
 export LLM_BASE_URL=http://localhost:4000/v1
 export LLM_MODEL=trend-pro
-export MCP_URL=stdio:./mcp-servers/trends_server.py
 ```
 
 These three values are the same whether you chose Ollama or Gemini.
@@ -91,7 +92,7 @@ In agentgateway's logs, you can see that it captures the requests to the LLM alo
 
 ## Explore the agentgateway UI
 
-Agentgateway provides a rich user interface accessible by default at [http://localhost:15000/ui](http://localhost:15000/ui){ target=_blank }.
+Agentgateway provides a rich user interface accessible by opening the vscode command pallet, search for "Open port in browser" and select port 15000.
 
 In the UI's home page, note that the "LLM" section is Enabled.
 
