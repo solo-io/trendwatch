@@ -20,11 +20,8 @@
 			"installDockerComposeSwitch": true,
 			"version": "latest",
 			"dockerDashComposeVersion": "v2"
-		},
-		// Node.js is required to bootstrap the LM Studio CLI (lms) via npx.
-		"ghcr.io/devcontainers/features/node:1": {
-			"version": "lts"
 		}
+		
 	},
 	// Install jq inside the container.
 	"onCreateCommand": "sudo apt-get update && sudo apt-get install -y jq && sudo rm -rf /var/lib/apt/lists/*",
@@ -38,8 +35,6 @@
 		"--add-host=host.docker.internal:host-gateway",
 		"--network=llm"
 	],
-	// LM Studio's OpenAI-compatible server. The base URL MUST end in /v1.
-	// Reachable via host.docker.internal (see LLM_BASE_URL above).
 	
 	"customizations": {
 		"vscode": {

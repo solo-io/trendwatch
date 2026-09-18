@@ -56,7 +56,7 @@ Having a proxy in front of LLM and MCP calls helps you audit, and build a pictur
 
 ## Observe distributed traces
 
-Open the [Jaeger Dashboard](http://localhost:16686/){ target=_blank } you started earlier.
+Open the [Jaeger Dashboard](http://localhost:16686/){ target=_blank }, served by the Jaeger container the dev container started for you.
 Click "Find Traces", listed should be a trace with 14 spans, representing a run of the `trendwatch` agent.
 Click on the trace, and examine the spans, which include:
 

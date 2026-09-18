@@ -9,11 +9,15 @@ Doing so has a number of benefits, including:
 
 ## Install agentgateway
 
-Install the agentgateway binary, version 1.5.0:
+The dev container already installed the `agentgateway` binary for you (version 1.5.0).
 
-```shell
-curl -sL https://agentgateway.dev/install | bash -s -- --version 1.5.0
-```
+!!! note "Installing agentgateway manually"
+
+    If you are running outside the dev container, install it with:
+
+    ```shell
+    curl -sL https://agentgateway.dev/install | bash -s -- --version 1.5.0
+    ```
 
 Verify that the `agentgateway` binary is in the PATH:
 
@@ -63,11 +67,7 @@ Start the proxy:
     agentgateway -f configs/llm-basic-gemini.yaml
     ```
 
-Open a second terminal, and activate the python virtual environment:
-
-```shell
-source .venv/bin/activate
-```
+Open a second terminal (also inside the dev container).
 
 In that second terminal, configure the `trendwatch` agent to point at the proxy when calling the LLM:
 

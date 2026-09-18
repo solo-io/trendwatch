@@ -1,34 +1,54 @@
 # Introduction
 
-This workshop helps you explore some of the agentic capabilities of [agentgateway](https://agentgateway.dev/){ target=_blank }.
+This workshop helps you explore some of the agentic capabilities of [agentgateway](https://agentgateway.dev/).
 
 The workshop is designed to be self-contained with a minimum of external dependencies.
 
 ## Prerequisites
 
-To work through this workshop, please ensure that you have the following installed on your machine:
+This workshop runs inside a [Dev Container](https://containers.dev/).
+The container comes preconfigured with everything the labs need, so you don't have to install these tools yourself:
 
-- python3 (version 3.11 or above)
-- [jq](https://jqlang.org/){ target=_blank }
-- docker
-- ollama (instructions for installation are below)
+- python3 (version 3.11) and the project's python dependencies
+- [jq](https://jqlang.org/)
+- the docker CLI
+- the `agentgateway` binary
+- a [Jaeger](https://www.jaegertracing.io/) tracing container (started automatically as a sibling container)
+
+The container also presets the environment variables the agent reads (`LLM_BASE_URL`, `LLM_MODEL`, `MCP_URL`, and `OTEL_EXPORTER_OTLP_ENDPOINT`).
+
+To open the workshop in the dev container, install the following on your machine:
+
+- [Docker](https://www.docker.com/) (or Podman)
+- [Visual Studio Code](https://code.visualstudio.com/) with the [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+- An OpenAI-compatible LLM server running on your **host** machine (see the [LLM Provider](#llm-provider) section below)
 
 ## LLM Provider
 
+The agent runs inside the dev container, but the LLM server runs on your **host** machine.
+The container reaches the host through the `host.docker.internal` hostname, which is already baked into the preset `LLM_BASE_URL`.
+
+!!! important "Listen on all interfaces"
+
+    So the container can reach it, start your LLM server on the host bound to `0.0.0.0` (not just `localhost`):
+
+    - **LM Studio**: enable "Serve on Local Network".
+    - **Ollama**: set `OLLAMA_HOST=0.0.0.0` and restart the server.
+
 === "Local model"
 
-    This workshop assumes a local inference model using the [Ollama](https://ollama.com/){ target=_blank }
-    project.
+    The dev container defaults to a local inference model reached at `http://host.docker.internal:1234/v1`, the default port for [LM Studio](https://lmstudio.ai/).
+    You can also use [Ollama](https://ollama.com/); it listens on port `11434` by default, so adjust `LLM_BASE_URL` accordingly in the devcontainer.json file and rebuild the dev container.
 
-    If you don't already have Ollama running, on a mac you can install it with [homebrew](https://brew.sh/){ target=_blank }:
+    Using Ollama on a mac, you can install it with [homebrew](https://brew.sh/):
 
     ```shell
     brew install ollama
     ```
 
-    For other platforms, consult the [Ollama docs](https://docs.ollama.com/linux){ target=_blank } for the install instructions.
+    For other platforms, consult the [Ollama docs](https://docs.ollama.com/linux) for the install instructions.
 
-    Pull the [qwen3](https://ollama.com/library/qwen3){ target=_blank } model.
+    Whichever server you choose, pull the [qwen3](https://ollama.com/library/qwen3) model so it matches the preset `LLM_MODEL`:
 
     ```shell
     ollama pull qwen3:8b
@@ -40,9 +60,7 @@ To work through this workshop, please ensure that you have the following install
     ollama list
     ```
 
-    By default, the ollama server listens on port 11434.
-
-    To make sure that the model is available and produces a response, send a test request to the local LLM:
+    From inside the dev container, send a test request to confirm the host's LLM is reachable and produces a response:
 
     ```shell
     curl -s $LLM_BASE_URL/chat/completions \
@@ -61,7 +79,7 @@ To work through this workshop, please ensure that you have the following install
 
     Mint a free key:
 
-    - Open [Google AI Studio](https://aistudio.google.com/apikey){ target=_blank } and sign in with a personal Google account.
+    - Open [Google AI Studio](https://aistudio.google.com/apikey) and sign in with a personal Google account.
     - Accept the Generative AI terms if prompted. Studio will create a default Cloud project for you.
     - Click Create API key. Prefer Create key in a new project if you just want a sandbox.
 
@@ -71,7 +89,7 @@ To work through this workshop, please ensure that you have the following install
     export GEMINI_API_KEY=<paste your key here>
     ```
 
-    Gemini exposes an [OpenAI-compatible](https://ai.google.dev/gemini-api/docs/openai){ target=_blank } endpoint.
+    Gemini exposes an [OpenAI-compatible](https://ai.google.dev/gemini-api/docs/openai) endpoint.
     Send it targeting the "Flash-Lite" model, a generous model for experiments:
 
     ```shell
@@ -92,11 +110,21 @@ Clone the GitHub repository for the project:
 git clone https://github.com/solo-io/trendwatch.git
 ```
 
-Navigate into the directory:
+Open the project in VS Code:
 
 ```shell
-cd trendwatch
+code trendwatch
 ```
+
+When VS Code prompts you (or from the Command Palette, run **Dev Containers: Reopen in Container**), reopen the folder in the dev container.
+The first build takes a few minutes. Behind the scenes it:
+
+- installs the project's python dependencies from `requirements.txt`,
+- installs the `agentgateway` binary,
+- starts the Jaeger tracing container as a sibling on a shared `llm` docker network,
+- presets the agent's environment variables.
+
+Once the container is ready, open a terminal in VS Code (it runs *inside* the container) for the rest of the workshop.
 
 The code consists of an agent named "TrendWatch", and a set of example MCP servers, written in python.
 
@@ -108,43 +136,25 @@ ls -lF agent/ mcp-servers/
 
 ### Setup
 
-Create a python virtual environment for the project:
+The dev container has already prepared your environment, so there is no need to create a python virtual environment, install dependencies, or start Jaeger by hand.
 
-```shell
-python3 -m venv .venv
-```
+For reference, the dev container performs the equivalent of the following steps for you:
 
-Activate the environment:
-
-```shell
-source .venv/bin/activate
-```
-
-!!! note  "Activating the virtual environment for different shells"
-
-    The python3 virtual environment provides different `activate` scripts for different types of shells.
-
-    If you happen to be running the [fish shell](https://fishshell.com/){ target=_blank }, substitute the above command with this instead:
+- Installs the python dependencies: `pip install -r requirements.txt`
+- Installs `agentgateway`.
+- Runs the [Jaeger](https://www.jaegertracing.io/) tracing container:
 
     ```shell
-    source .venv/bin/activate.fish
+    docker run -d --name jaeger \
+      -p 16686:16686 -p 4317:4317 \
+      jaegertracing/all-in-one:latest
     ```
 
-Install the project's dependencies:
-
-```shell
-pip install -r requirements.txt
-```
-
-Run the distributed tracing project [Jaeger](https://www.jaegertracing.io/){ target=_blank } in a docker container:
-
-```shell
-docker run -d --name jaeger \
-  -p 16686:16686 -p 4317:4317 \
-  jaegertracing/all-in-one:latest
-```
-
 You will use Jaeger to inspect distributed traces illustrating the call flows between the agent, the LLM, and MCP servers.
+
+!!! note "Running outside the dev container"
+
+    If you prefer to run the workshop without the dev container, you will need to perform those steps yourself: create and activate a python virtual environment (`python3 -m venv .venv` then `source .venv/bin/activate`, or `source .venv/bin/activate.fish` for the [fish shell](https://fishshell.com/)), install the dependencies, install `agentgateway`, start Jaeger, and export the environment variables described below.
 
 ### Configure and run the agent
 
@@ -159,15 +169,21 @@ Let us walk through an example.
 
 === "Local model"
 
-    Configure the three environment variables as follows:
+    In the dev container these three variables are **already set** for you:
 
     ```shell
-    export LLM_BASE_URL="http://localhost:11434/v1"
-    export LLM_MODEL="qwen3:8b"
-    export MCP_URL="stdio:./mcp-servers/trends_server.py"
+    LLM_BASE_URL="http://host.docker.internal:1234/v1"
+    LLM_MODEL="qwen3:8b"
+    MCP_URL="stdio:./mcp-servers/trends_server.py"
     ```
 
-    Above, we configure the agent to call `ollama`, to use the preconfigured `qwen` model, and to use the `trend_server` MCP server over the stdio transport (runs as a child process).
+    This configures the agent to call your host's LLM server (LM Studio on port `1234` by default; use `11434` for Ollama), to use the preconfigured `qwen3:8b` model, and to use the `trends_server` MCP server over the stdio transport (runs as a child process).
+
+    Confirm they are set:
+
+    ```shell
+    echo "$LLM_BASE_URL $LLM_MODEL $MCP_URL"
+    ```
 
     Try it out by running:
 
@@ -177,7 +193,7 @@ Let us walk through an example.
 
 === "Remote model"
 
-    Configure the environment variables as follows:
+    To target Gemini instead of a local model, override the preset variables in your terminal:
 
     ```shell
     export LLM_BASE_URL="https://generativelanguage.googleapis.com/v1beta/openai/"
@@ -186,7 +202,7 @@ Let us walk through an example.
     export MCP_URL="stdio:./mcp-servers/trends_server.py"
     ```
 
-    Above, we configure the agent to call Gemini's [OpenAI-compatible](https://ai.google.dev/gemini-api/docs/openai){ target=_blank } endpoint, to use the Flash-Lite model, and to use the `trends_server` MCP server over the stdio transport (runs as a child process). `LLM_API_KEY` is the Gemini key from the previous step.
+    Above, we configure the agent to call Gemini's [OpenAI-compatible](https://ai.google.dev/gemini-api/docs/openai) endpoint, to use the Flash-Lite model, and to use the `trends_server` MCP server over the stdio transport (runs as a child process). `LLM_API_KEY` is the Gemini key from the previous step.
 
     Try it out by running:
 
