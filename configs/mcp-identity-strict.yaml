@@ -7,8 +7,8 @@ llm:
   - name: trend-pro
     provider: openAI
     params:
-      baseUrl: http://localhost:11434/v1
-      model: qwen3:8b
+      baseUrl: $LLM_BASE_URL
+      model: $LLM_MODEL
       apiKey: ollama-does-not-check-this
 mcp:
   policies:
