@@ -45,7 +45,7 @@ To work through this workshop, please ensure that you have the following install
     To make sure that the model is available and produces a response, send a test request to the local LLM:
 
     ```shell
-    curl -s http://localhost:11434/v1/chat/completions \
+    curl -s $LLM_BASE_URL/chat/completions \
       -H "Content-Type: application/json" \
       -d '{"model":"qwen3:8b","messages":[{"role":"user","content":"say hi"}]}' | jq
     ```

@@ -24,7 +24,7 @@ From one terminal, start agentgateway with the updated configuration file:
 === "Local model"
 
     ```shell
-    agentgateway -f configs/mcp-single.yaml
+    agentgateway -f <(envsubst < configs/mcp-single.yaml)
     ```
 
 === "Remote model"
@@ -91,7 +91,7 @@ Restart agentgateway with the updated configuration file:
 === "Local model"
 
     ```shell
-    agentgateway -f configs/mcp-multiplex.yaml
+    agentgateway -f <(envsubst < configs/mcp-multiplex.yaml)
     ```
 
 === "Remote model"
@@ -138,7 +138,7 @@ In the first terminal, restart agentgateway with the updated configuration file:
 === "Local model"
 
     ```shell
-    agentgateway -f configs/tool-filtering.yaml
+    agentgateway -f <(envsubst < configs/tool-filtering.yaml)
     ```
 
 === "Remote model"

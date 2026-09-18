@@ -37,7 +37,7 @@ In one terminal, start agentgateway:
 === "Local model"
 
     ```shell
-    agentgateway -f configs/no-github-token.yaml
+    agentgateway -f <(envsubst < configs/no-github-token.yaml)
     ```
 
 === "Remote model"
@@ -100,7 +100,7 @@ Start the agentgateway with this configuration:
 === "Local model"
 
     ```shell
-    agentgateway -f configs/credential-injection.yaml
+    agentgateway -f <(envsubst < configs/credential-injection.yaml)
     ```
 
 === "Remote model"

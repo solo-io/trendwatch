@@ -44,7 +44,7 @@ From one terminal, start agentgateway:
 === "Local model"
 
     ```shell
-    agentgateway -f configs/injection.yaml
+    agentgateway -f <(envsubst < configs/injection.yaml)
     ```
 
 === "Remote model"
@@ -114,7 +114,7 @@ Start agentgateway with the updated configuration:
 === "Local model"
 
     ```shell
-    agentgateway -f configs/prompt-guard.yaml
+    agentgateway -f <(envsubst < configs/prompt-guard.yaml)
     ```
 
 === "Remote model"

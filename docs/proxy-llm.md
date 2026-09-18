@@ -52,7 +52,7 @@ Start the proxy:
 === "Local model"
 
     ```shell
-    agentgateway -f configs/llm-basic.yaml
+    agentgateway -f <(envsubst < configs/llm-basic.yaml)
     ```
 
 === "Remote model"
@@ -135,7 +135,7 @@ Restart agentgateway with the updated configuration file:
 === "Local model"
 
     ```shell
-    agentgateway -f configs/token-budget.yaml
+    agentgateway -f <(envsubst < configs/token-budget.yaml)
     ```
 
 === "Remote model"

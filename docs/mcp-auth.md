@@ -42,7 +42,7 @@ From one terminal, launch agentgateway:
 === "Local model"
 
     ```shell
-    agentgateway -f configs/mcp-identity.yaml
+    agentgateway -f <(envsubst < configs/mcp-identity.yaml)
     ```
 
 === "Remote model"
