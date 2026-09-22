@@ -6,19 +6,19 @@ Review the agentgateway configuration you are about to use:
 
 === "Local model"
 
-    ```shell
-    cat configs/injection.yaml
+    ```yaml title="injection.yaml" linenums="1"
+    --8<-- "configs/injection.yaml"
     ```
 
 === "Remote model"
 
-    ```shell
-    cat configs/injection-gemini.yaml
+    ```yaml title="injection-gemini.yaml" linenums="1"
+    --8<-- "configs/injection-gemini.yaml"
     ```
 
 Pay attention to how the `trends_server` MCP server is configured, with the environment variable "TRENDS_FIXTURES=1":
 
-```yaml
+```yaml linenums="1"
   - name: trends
     stdio:
       cmd: .venv/bin/python3
@@ -93,14 +93,14 @@ Review a revised configuration that utilizes a feature called "guardrails"
 
 === "Local model"
 
-    ```shell
-    cat configs/prompt-guard.yaml
+    ```yaml title="prompt-guard.yaml" linenums="1"
+    --8<-- "configs/prompt-guard.yaml"
     ```
 
 === "Remote model"
 
-    ```shell
-    cat configs/prompt-guard-gemini.yaml
+    ```yaml title="prompt-guard-gemini.yaml" linenums="1"
+    --8<-- "configs/prompt-guard-gemini.yaml"
     ```
 
 The configuration makes use of both request and response guardrails.

@@ -6,8 +6,8 @@ In this lab, you will experiment with yet another interesting feature of agentga
 
 Review the following, trimmed, OpenAPI specification for the GitHub API:
 
-```shell
-cat configs/github-search.openapi.json
+```json title="github-search.openapi.json" linenums="1"
+--8<-- "configs/github-search.openapi.json"
 ```
 
 The specification exposes three API calls:
@@ -20,14 +20,14 @@ Next, review the agentgateway configuration:
 
 === "Local model"
 
-    ```shell
-    cat configs/no-github-token.yaml
+    ```yaml title="no-github-token.yaml" linenums="1"
+    --8<-- "configs/no-github-token.yaml"
     ```
 
 === "Remote model"
 
-    ```shell
-    cat configs/no-github-token-gemini.yaml
+    ```yaml title="no-github-token-gemini.yaml" linenums="1"
+    --8<-- "configs/no-github-token-gemini.yaml"
     ```
 
 Above, note how the mcp target using an `openapi` stanza, which references the OpenAPI specification.
@@ -68,14 +68,14 @@ Review the agentgateway configuration:
 
 === "Local model"
 
-    ```shell
-    cat configs/credential-injection.yaml
+    ```yaml title="credential-injection.yaml" linenums="1"
+    --8<-- "configs/credential-injection.yaml"
     ```
 
 === "Remote model"
 
-    ```shell
-    cat configs/credential-injection-gemini.yaml
+    ```yaml title="credential-injection-gemini.yaml" linenums="1"
+    --8<-- "configs/credential-injection-gemini.yaml"
     ```
 
 The main thing to note is the static key configured under `backendAuth`: the key is configured to the value of the environment variable GITHUB_TOKEN.

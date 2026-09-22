@@ -22,14 +22,14 @@ Review the following agentgateway configuration:
 
 === "Local model"
 
-    ```shell
-    cat configs/mcp-identity.yaml
+    ```yaml title="mcp-identity.yaml" linenums="1"
+    --8<-- "configs/mcp-identity.yaml"
     ```
 
 === "Remote model"
 
-    ```shell
-    cat configs/mcp-identity-gemini.yaml
+    ```yaml title="mcp-identity-gemini.yaml" linenums="1"
+    --8<-- "configs/mcp-identity-gemini.yaml"
     ```
 
 The configuration has both authentication and authorization sections.

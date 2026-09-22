@@ -31,16 +31,16 @@ Run the command below and review the configuration for agentgateway:
 
 === "Local model"
 
-    ```shell
-    cat configs/llm-basic.yaml
+    ```yaml title="llm-basic.yaml" linenums="1"
+    --8<-- "configs/llm-basic.yaml"
     ```
 
     The configuration cites a single model, named "trend-pro", hiding the fact that "trend-pro" is backed by the qwen3 model.  Since this model runs locally with ollama, it does not require an apiKey.
 
 === "Remote model"
 
-    ```shell
-    cat configs/llm-basic-gemini.yaml
+    ```yaml title="llm-basic-gemini.yaml" linenums="1"
+    --8<-- "configs/llm-basic-gemini.yaml"
     ```
 
     The configuration cites a single model, named "trend-pro", hiding the fact that "trend-pro" is backed by Gemini Flash-Lite.  The proxy authenticates to Gemini with `GEMINI_API_KEY`, so the agent never sees the real key.
@@ -115,14 +115,14 @@ Review the following proxy configuration:
 
 === "Local model"
 
-    ```shell
-    cat configs/token-budget.yaml
+    ```yaml title="token-budget.yaml" linenums="1"
+    --8<-- "configs/token-budget.yaml"
     ```
 
 === "Remote model"
 
-    ```shell
-    cat configs/token-budget-gemini.yaml
+    ```yaml title="token-budget-gemini.yaml" linenums="1"
+    --8<-- "configs/token-budget-gemini.yaml"
     ```
 
 The above configuration adds a policy to rate-limit requests.

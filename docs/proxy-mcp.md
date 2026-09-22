@@ -7,14 +7,14 @@ Review the following agentgateway configuration:
 
 === "Local model"
 
-    ```shell
-    cat configs/mcp-single.yaml
+    ```yaml title="mcp-single.yaml" linenums="1"
+    --8<-- "configs/mcp-single.yaml"
     ```
 
 === "Remote model"
 
-    ```shell
-    cat configs/mcp-single-gemini.yaml
+    ```yaml title="mcp-single-gemini.yaml" linenums="1"
+    --8<-- "configs/mcp-single-gemini.yaml"
     ```
 
 In addition to the `llm` configuration, we now also have an `mcp` configuration with a single target:  the `trends_server` MCP server.
@@ -73,14 +73,14 @@ Review the next configuration:
 
 === "Local model"
 
-    ```shell
-    cat configs/mcp-multiplex.yaml
+    ```yaml title="mcp-multiplex.yaml" linenums="1"
+    --8<-- "configs/mcp-multiplex.yaml"
     ```
 
 === "Remote model"
 
-    ```shell
-    cat configs/mcp-multiplex-gemini.yaml
+    ```yaml title="mcp-multiplex-gemini.yaml" linenums="1"
+    --8<-- "configs/mcp-multiplex-gemini.yaml"
     ```
 
 Above, the main difference is the addition of two other MCP servers.
@@ -117,14 +117,14 @@ In the first terminal, press `Ctrl+C` to terminate agentgateway, and review the 
 
 === "Local model"
 
-    ```shell
-    cat configs/tool-filtering.yaml
+    ```yaml title="tool-filtering.yaml" linenums="1"
+    --8<-- "configs/tool-filtering.yaml"
     ```
 
 === "Remote model"
 
-    ```shell
-    cat configs/tool-filtering-gemini.yaml
+    ```yaml title="tool-filtering-gemini.yaml" linenums="1"
+    --8<-- "configs/tool-filtering-gemini.yaml"
     ```
 
 The important difference is the added `mcpAuthorization` policy with three rules specified as [CEL (Common Expression Language) expressions](https://agentgateway.dev/docs/standalone/latest/reference/cel/){ target=_blank }.
