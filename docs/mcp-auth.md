@@ -117,3 +117,30 @@ python3 agent/trendwatch.py \
 In this lab, authentication and authorization for a backend MCP server was configured at the proxy.
 The benefit of employing a proxy is the ability to decouple the implementation of cross-cutting concerns such as security from the logic of the backend workload, be it an MCP server or some other type of backend.
 No changes to the backend service were required to implement the security layer.
+
+## Cleanup
+
+When you are finished, shut down the two services this lab started.
+
+Stop **agentgateway** with `Ctrl-C` in the terminal where it is running.
+
+The **fake identity provider** was started in the background (it listens on port 9000), so stop it by name:
+
+```shell
+pkill -f fake_idp.py
+```
+
+Confirm nothing is still listening on the workshop ports — agentgateway's LLM (4000) and MCP (3000) lanes and the identity provider (9000):
+
+```shell
+lsof -i :9000 -i :3000 -i :4000
+```
+
+No output means everything is stopped.
+
+In the second terminal — the one where you sourced `fake_idp.env` and ran the agent — clear the identity environment variables:
+
+```shell
+unset MCP_TOKEN READER_JWT PUBLISHER_JWT
+rm -f fake_idp.env
+```
