@@ -9,10 +9,10 @@ Doing so has a number of benefits, including:
 
 ## Install agentgateway
 
-Install the agentgateway binary, version 1.5.0:
+Install the agentgateway binary, version 1.6.0:
 
 ```shell
-curl -sL https://agentgateway.dev/install | bash -s -- --version 1.5.0
+curl -sL https://agentgateway.dev/install | bash -s -- --version 1.6.0
 ```
 
 Verify that the `agentgateway` binary is in the PATH:
