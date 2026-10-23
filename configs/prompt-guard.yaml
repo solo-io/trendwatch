@@ -43,6 +43,7 @@ llm:
       model: qwen3:8b
       apiKey: ollama-does-not-check-this
 mcp:
+  port: 3000
   targets:
   - name: trends
     stdio:
